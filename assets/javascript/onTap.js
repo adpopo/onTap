@@ -38,8 +38,9 @@
 // moments.js - if after midnight, have a bunch of divs fade in
 //              and ask them if they're sure about what they're
 //              about to be doing
-// 
-//
+// easter eggs: certain bubbles from above animation be clickable with random 
+//              beer facts, random facts about the developers (us!)
+// uber link? button? thingy (contact lyft/uber for a free ride code for users)
 //=================================================
 
 
@@ -56,15 +57,16 @@
 $("#tbd").on("click", function(){
     
     // zip handler
+        //save as a var
+        
+    // yelp handler (zip code)
     
-    // yelp handler
+    // beerspot handler (yelp obj)
+        // save beer to var 
+
+    // display shit (yelp obj, beer name)
     
-    // beerspot handler
-        // beer spot api key: 11db568c817544393d8820e93473a61a
-    
-    // display shit
-    
-    // map display
+    // map display (yelp obj)
 
 });
 
@@ -82,7 +84,10 @@ $("#tbd").on("click", function(){
 //=================================================
 
     // take zip code
+    // check if a real number
+    // convert zip to string
     // pass zip to var
+    // return zip
     
 
     
@@ -118,6 +123,7 @@ $("#tbd").on("click", function(){
 // returns beer name
 // The Beer Spot API Key: 11db568c817544393d8820e93473a61a
 //=================================================
+
     // ajax call to beerspot
         //get a beer of the type we want
 
@@ -139,8 +145,8 @@ $("#tbd").on("click", function(){
     //display beer name
     //display brewery name
     //display address
-    
-    
+    //uber button
+        // optional: passes address data from yelp obj
     
     
     
