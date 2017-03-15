@@ -1,0 +1,132 @@
+/*Dark Beer Color gradient: #6b3f18 (top) to #2e1906 (bottom) */
+/*Medium Beer Color gradient: #fa9620 (top) to #cd421c (bottom) */
+/*Light Beer Color gradient: #ffbd31 (top) to #d5741d (bottom) */
+
+@font-face {
+ 	font-family: BIG JOHN; 
+ 	src: url('BIG JOHN.otf'); 
+ }
+ 
+@font-face {
+ 	font-family: Didot Regular; 
+ 	src: url('Didot Regular.ttf'); 
+ }
+
+
+body {
+ background-image: url("../images/wood table.jpg");
+ background-repeat: no-repeat;
+ background-attachment: fixed;
+}
+
+.center-block {
+	height: auto;
+	width: auto;
+    }
+
+#topLogo {
+    overflow: hidden;
+}
+
+
+#ex3{
+	text-align: center;
+	background-color: #f29947;
+	border-color: white;
+	font-size: 20px;
+	font-family:BIG JOHN;
+	width: 20%;
+}
+
+::-webkit-input-placeholder {
+	color: white !important;
+}
+
+.form-control{
+	color:white !important;
+	display: block;
+	
+}
+
+.img-rounded, .img {
+	display: inline-block;
+	width: 100%;
+	height: 50px;
+	position: relative;
+	
+}
+
+#handle {
+	height: 400px;
+}
+#dark {
+	height: 400px;
+	background: #6b3f18; /* For browsers that do not support gradients */
+    background: -webkit-linear-gradient(#6b3f18, #2e1906); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(#6b3f18, #2e1906); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(#6b3f18, #2e1906); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(#6b3f18, #2e1906); /* Standard syntax (must be last) */
+}
+
+#medium {
+	height: 400px;
+    background: #fa9620 ; /* For browsers that do not support gradients */
+    background: -webkit-linear-gradient(#fa9620 , #cd421c); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(#fa9620 , #cd421c); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(#6b3f18, #cd421c); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(#fa9620 , #cd421c); /* Standard syntax (must be last) */
+}
+
+#light {
+	height: 400px;
+	background: #ffbd31 ; /* For browsers that do not support gradients */
+    background: -webkit-linear-gradient(#ffbd31 , #d5741d); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(#ffbd31 , #d5741d); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(#ffbd31, #d5741d); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(#ffbd31 , #d5741d); /* Standard syntax (must be last) */
+}
+
+
+
+.row.no-gutters {
+  margin-right: 0;
+  margin-left: 0;
+}
+.row.no-gutters > [class^="col-"],
+.row.no-gutters > [class*=" col-"] {
+  padding-right: 0;
+  padding-left: 0;
+}
+
+
+.copy {
+	color: white;
+	font-family: Didot Regular;
+	font-size: 25px;
+	text-align: center;
+	padding: 20px;
+}
+
+.cloud-container {
+	background-image: url(cloud.png);
+	background-position: center center;
+	background-size: contain;
+	background-repeat: no-repeat;
+	height: 275px;
+	width: 100%;
+	margin: 314px auto -20px;
+	position: relative;
+}
+
+.cloud-form {
+	text-align: center;
+	font-size: 30px;
+	margin-bottom: 5px;
+	font-family:BIG JOHN;
+	color: #f29947;
+	margin-top: 30px;
+	position: absolute;
+	top: 70px;
+	left: 25%;
+	right: 25%;
+}
