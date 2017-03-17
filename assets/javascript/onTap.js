@@ -4,12 +4,9 @@
 //=================================================
 //=================================================
 // pick your task: put your name next to a function that needs work
-// Front End -- Megan
-// event listener -- Hoang
-// debugging hoang's shit -- Hoang
-// breweryDB handler -- Lauren
-// display text -- Rose/Meg
-// gmaps handler -- Lauren
+// Front End -- Meg/Rose
+// event listener -- Hoang/Lauren
+// debugging everything -- Hoang/Lauren
 // 
 // 
 // 
@@ -51,9 +48,17 @@
 // listens to click event from the big div with all the beer types
 // dynamically generates the "menu" style thing at the bottom
 //=================================================
-$("#beer").on("click", "#dark", onClick("light"));
-$("#beer").on("click", "#medium", onClick("medium"));
-$("#beer").on("click", "#light", onClick("light"));
+$("#beers").on("click", "#dark", function{
+	onClick("dark");
+	});
+
+$("#beers").on("click", "#medium", function{
+	onClick("medium");
+	});
+
+$("#beers").on("click", "#light", function{
+	onClick("light");
+	});
 
 
 
@@ -66,25 +71,27 @@ function onClick(beerType){
     }
 
     // google caller (zip code)
-    var locations = callMap(zip);
+    var locations = map.callMap(zip);
     
     // brewerydb confirm (location obj, beer type)
-    var brewery = confirmBrewery(locations);
+    var brewery = breweryDB.confirmBrewery(locations, zip);
+    
+    // display shit (location obj)
+    displayInfo(brewery);
     
     // brewerydb beer finder
-    var beers = findBrew( brewery.name, beerType);
-
-    // display shit (location obj, beer name)
-    displayInfo(brewery,beers);
+    breweryDB.beerLookup(brewery.name, beerType, function(beers){
+    	//display beer
+    	$("#beer").html(beers[i].name);
+    	$("#description").html(beers[i].style.category.name);
+    	$("#description").append("<br>");
+    	$("#description").append(beers[i].style.description);
+    	$("#details").html(beers[i].description);
+    })
 
     // map display (location obj)
-	displayMap(brewery.address[brewery.index]);
+	map.displayMap(brewery.address[brewery.index]);
 }
-
-
-
-
-
 
 
 //=================================================
@@ -105,194 +112,176 @@ function parseZip(){
     // return zip
     return zip;
 }
-    
 
 
-    
 //=================================================
-// google places caller
-// takes a 5-digit int or string, must be valid zip code
-// returns an obj containing name and address of highest-rated nearby breweries
-// return obj = { name : [String], address : [String], rate : [String]}
-// api key:AIzaSyDwJEzk5FbNL1fwKBxifUONzQMvDdYShqs
-// //=================================================
+// breweryDB obj
+// BreweryDB API Key:  8a2157f57773e1804749e5370a40a584
+// This calls the BreweryDB API with the parameters set by the user (light, med,
+//	or dark)
+// Returns an array of three beers from nearby brewery that are suitable for the
+//	type the user specifies (light, med, or dark)
+//=================================================
 
-function callMap(zip){
-var longitude;
-var latitude;
-var ret;
+var breweryDB = {
+    breweryKey: "8a2157f57773e1804749e5370a40a584",
+    brewQueryURL: "https://api.brewerydb.com/v2/search?&format=json&",
+    
+    
+    beerLookup: function(googleResult, beerType, cb) {
+        // googleResult = data from zip code search + brewerydb brewery search
+        // beerType needs to be light, medium, or dark
+        // cb is a function that accepts one argument; cb is called with an array of top three beers
+            // if there is an error, cb is called with false instead of an array
+        var queryURL = this.brewQueryURL + $.param({ 
+            key: this.breweryKey, 
+            q: googleResult, 
+            type: "beer", 
+        });
+	    //googleResult is the var that holds result that comes back from Google search/BreweryDB location search
+	    // below is weird ajax call Peter drummed up for me
+	    var self = this;
+        $.ajax({
+        	 method: "POST",
+			  dataType: "json",
+			  url: "https://proxy-cbc.herokuapp.com/proxy",
+			  data: {
+			  	url: queryURL
+			  },
+            success: function (response) {
+                console.log(response);
+                var brewResults = response;
+                var userSearch = brewResults.data.data;
+                console.log(userSearch);
+                
+                if (self.beerTypes.hasOwnProperty(beerType)) {
+                	console.log(beerType);
+                    // empty array to hold top three results
+                    var indexArray = [];
+                	// looping through results to return data specified by user
+                    for (var i = 0; i < userSearch.length; i++) {
+                        if (self.beerTypes[beerType].indexOf(userSearch[i].style.name) >= 0) {
+                            indexArray.push(userSearch[i]);              
+                            if (indexArray.length >= 3) {
+                                break;
 
-//get location data
-$.ajax({
-    url: "https://maps.googleapis.com/maps/api/geocode/json?address="+ zip
-    +"&key=AIzaSyDwJEzk5FbNL1fwKBxifUONzQMvDdYShqs",
-    method: "GET"
-	}).done(function(response){
-	    //get latitude/longitude points from zip code
-		latitude = response.results[0].geometry.location.lat;
-		longitude = response.results[0].geometry.location.lng;
-		
-		//set up google map for query
-		var loc = new google.maps.LatLng(latitude, longitude);
-		var map = google.maps.Map(document.getElementById('map'), {
-		    center: loc,
-		    zoom: 4
-		  });
-		  
-		//query specs : location: based on zip, radius: 5km, term: brewery
-		var request = {
-		    location: loc,
-		    radius: '5000',
-			query: 'brewery',
-			type: 'brewery'
-		};
+                            }
+                        }
+                    }
+                    console.log(indexArray);
+                    cb(indexArray);
+                }
 
-		//google places library call
-		var service = new google.maps.places.PlacesService(map);
-		service.textSearch(request, function(results, status) {
-			if (status == google.maps.places.PlacesServiceStatus.OK) {
-				var rate = [0,0,0];
-				var theSpot = ["","",""];
-				var address = ["","",""];
-				//find highest rated brewery
-			    for (var i = 0; i < results.length; i++) {
-			    	//check rating
-		    		for(var j=0; j<3; j++){
-			    		if(rate[j]<results[i].rating){
-			    			//last check
-			    			if(j==2){
-			    			rate[j] = results[i].rating;
-							address[j] = results[i].formatted_address;
-							theSpot[j] = results[i].name;
-			    			}
-			    			//middle check
-			    			else if( j==1){
-				    			rate[j+1] = rate[j];
-				    			address[j+1] = address[j];
-				    			theSpot[j+1] = theSpot [j];
-				    			rate[j] = results[i].rating;
-								address[j] = results[i].formatted_address;
-								theSpot[j] = results[i].name;
-							}
-							//highest rated!!
-							else{
-								rate[j+2] = rate[j+1];
-				    			address[j+2] = address[j+1];
-				    			theSpot[j+2] = theSpot [j+1];
-				    			rate[j+1] = rate[j];
-				    			address[j+1] = address[j];
-				    			theSpot[j+1] = theSpot [j];
-				    			rate[j] = results[i].rating;
-								address[j] = results[i].formatted_address;
-								theSpot[j] = results[i].name;									
-							}
-							break;
-			    		}
-			    	}
-			    }
-			    //build out return obj
-			    ret = { name: theSpot, address: address, rating: rate };
-			    return ret;
-			  }
-		});
-
-	});
-
-}
-
-
-
-
-
-
-
+            },
+            error: function(e) {
+               console.log(e);
+               cb(false);
+            }
+        });
+    },
+    beerTypes: {
+        light: ["Belgian-Style Blonde Ale", "Belgian-Style Tripel", "Belgian-Style Pale Ale", "Belgian-Style Pale Strong Ale", "Belgian-Style White (or Wit) / Belgian-Style Wheat", "French & Belgian-Style Saison", "Classic English-Style Pale Ale", "English-Style India Pale Ale", "English-Style Summer Ale", "Contemporary Gose", "German-Style Kölsch / Köln-Style Kölsch", "Berliner-Style Weisse (Wheat)", "Leipzig-Style Gose", "South German-Style Hefeweizen / Hefeweissbier", "South German-Style Kristall Weizen / Kristall Weissbier", "German-Style Leichtes Weizen / Weissbier", "Kellerbier (Cellar beer) or Zwickelbier - Ale", "American-Style Pale Ale", "Fresh 'Wet' Hop Ale", "Pale American-Belgo-Style Ale", "Golden or Blonde Ale", "American-Style Sour Ale", "Session India Pale Ale", "German-Style Pilsener", "Bohemian-Style Pilsener", "German-Style Leichtbier", "Münchner (Munich)-Style Helles", "Dortmunder / European-Style Export", "Vienna-Style Lager", "Kellerbier (Cellar beer) or Zwickelbier - Lager", "American-Style Cream Ale or Lager", "Session Beer", "Light American Wheat Ale or Lager with Yeast", "Light American Wheat Ale or Lager without Yeast", "Fruit Wheat Ale or Lager with or without Yeast", "Ginjo Beer or Sake-Yeast Beer", "International-Style Pilsener", "Dry Lager", "American-Style Lager", "American-Style Light (Low Calorie) Lager", "American-Style Low-Carbohydrate Light Lager", "American-Style Pilsener", "American-Style Premium Lager", "American-Style Ice Lager", "Australasian, Latin American or Tropical-Style Light Lager"],
+        medium: ["Belgian-Style Flanders Oud Bruin or Oud Red Ales", "Belgian-Style Dubbel", "Belgian-Style Quadrupel", "Belgian-Style Dark Strong Ale", "Belgian-Style Table Beer", "Other Belgian-Style Ales", "French-Style Bière de Garde", "English-Style India Pale Ale", "Ordinary Bitter", "Special Bitter or Best Bitter", "Extra Special Bitter", "Scottish-Style Heavy Ale", "English-Style Brown Ale", "Scottish-Style Light Ale", "Scottish-Style Export Ale", "English-Style Pale Mild Ale", "Old Ale", "Strong Ale", "British-Style Barley Wine Ale", "Double Red Ale", "South German-Style Bernsteinfarbenes Weizen / Weissbier", "South German-Style Weizenbock / Weissbock", "German-Style Altbier", "Adambier", "International-Style Pale Ale", "Australian-Style Pale Ale", "Irish-Style Red Ale", "Dark American-Belgo-Style Ale", "American-Style Strong Pale Ale", "American-Style India Pale Ale", "Imperial or Double India Pale Ale", "American-Style Amber/Red Ale", "Imperial Red Ale", "American-Style Barley Wine Ale", "American-Style Wheat Wine Ale", "American-Style Brown Ale", "Bohemian-Style Pilsener", "German-Style Märzen", "German-Style Oktoberfest / Wiesen (Meadow)", "Bamberg-Style Märzen Rauchbier", "Bamberg-Style Helles Rauchbier", "Bamberg-Style Bock Rauchbier", "Traditional German-Style Bock", "German-Style Heller Bock/Maibock", "German-Style Doppelbock", "California Common Beer", "Rye Ale or Lager with or without Yeast", "German-Style Rye Ale (Roggenbier) with or without Yeast", "Pumpkin Beer", "Wood- and Barrel-Aged Pale to Amber Beer", "Wood- and Barrel-Aged Strong Beer", "Wood- and Barrel-Aged Beer", "Aged Beer (Ale or Lager)", "Other Strong Ale or Lager", "American-Style Malt Liquor", "American-Style Amber Lager", "American-Style Märzen / Oktoberfest", "Grodziskie", "Dutch-Style Kuit, Kuyt or Koyt"],
+        dark: ["British-Style Imperial Stout", "Brown Porter", "Robust Porter", "Sweet or Cream Stout", "Oatmeal Stout", "South German-Style Dunkel Weizen / Dunkel Weissbier", "Bamberg-Style Weiss (Smoke) Rauchbier (Dunkel or Helles)", "Classic Irish-Style Dry Stout", "Foreign (Export)-Style Stout", "Smoke Porter", "American-Style Black Ale", "American-Style Stout", "American-Style Imperial Stout", "Specialty Stouts", "American-Style Imperial Porter", "European-Style Dark / Münchner Dunkel", "German-Style Schwarzbier", "German-Style Eisbock", "Dark American Wheat Ale or Lager with Yeast", "Dark American Wheat Ale or Lager without Yeast", "Chocolate / Cocoa-Flavored Beer", "Coffee-Flavored Beer", "Smoke Beer (Lager or Ale)", "Wood- and Barrel-Aged Dark Beer", "American-Style Dark Lager", "Baltic-Style Porter"],
+        weird: ["Brett Beer", "Fruit Wheat Ale or Lager with or without Yeast", "Fruit Beer", "Field Beer", "Herb and Spice Beer", "Specialty Beer", "Specialty Honey Lager or Ale", "Gluten-Free Beer", "Indigenous Beer (Lager or Ale)", "Experimental Beer (Lager or Ale)", "Historical Beer", "Wood- and Barrel-Aged Sour Beer", "Non-Alcoholic (Beer) Malt Beverages", "Belgian-style Fruit Beer", "Chili Pepper Beer", "Mixed Culture Brett Beer", "Wild Beer", "Flavored Malt Beverage", "Energy Enhanced Malt Beverage", "Belgian-Style Lambic", "Belgian-Style Gueuze Lambic", "Belgian-Style Fruit Lambic", "Braggot", "Metheglin", "Pyment (Grape Melomel)", "Other Fruit Melomel", "Sweet Mead", "Semi-Sweet Mead", "Dry Mead6"],
+        cider:["Common Cider", "English Cider", "French Cider", "New England Cider", "Fruit Cider", "Apple Wine", "Common Perry", "Traditional Perry", "Other Specialty Cider or Perry", "Cyser (Apple Melomel)"]
+    },
+    
 //=================================================
 // breweryDB brewery confirm
 // takes obj from callMap function
 // object type taken = { address:[string], name:[string], rating:[string]}
 // returns object with brewery name as String, brewery address as String, brewery rating as float and index of brewery
 // return format obj = { Name: name, address: address, rating: #.#, index: #}
-// BreweryDB API Key:  8a2157f57773e1804749e5370a40a584
 //=================================================
-function confirmBrewery(breweries){
-//search BreweryDB API for breweries matching top rated
-$.ajax({
-    url: "http://api.brewerydb.com/v2/locations?key='8a2157f57773e1804749e5370a40a584'&postalCode=" + zip,
-    method: "GET",
-    crossDomain: true,
-    dataType: 'json',
-	success: function(response){
-		//loop through breweries in response data
-		for(var i = 0; i<response.data.length; i++){
-			//loop through breweries in input data
-			for(var j = 0; j < breweries.name.length ; j++){
-				//if response.name == breweries.name[i]
-				if(response.data[i].name == breweries.name[j]){
-					//build out return obj
-					var ret = { name: breweries.name[j], address: breweries.address[j], rating: breweries.rating[i], index:i};
-					//return
-					return ret;
+	function confirmBrewery(breweries, zip){
+	//search BreweryDB API for breweries matching top rated
+		$.ajax({
+			method: "POST",
+			dataType: "json",
+			url: "https://proxy-cbc.herokuapp.com/proxy",
+			data: {
+		   		url: "http://api.brewerydb.com/v2/locations?key='8a2157f57773e1804749e5370a40a584'&postalCode=" + zip
+		  	}
+		})
+		.done(function(response){
+			//loop through breweries in response data
+			for(var i = 0; i<response.data.length; i++){
+				//loop through breweries in input data
+				for(var j = 0; j < breweries.name.length ; j++){
+					//if response.name == breweries.name[i]
+					if(response.data[i].name == breweries.name[j]){
+						//build out return obj
+						var ret = { name: breweries.name[j],
+									address: breweries.address[j],
+									rating: breweries.rating[i],
+									index:i
+						};
+						//return
+						return ret;
+					}
+					else{
+						return false;
+					}
 				}
 			}
-		}
-	},
-	//error msg
-	error: function (error) {
-               console.log(error);
-    }
-});
+		});
+	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//=================================================
-// breweryDB handler
-// takes brewery name in string form
-// returns beer name
-// BreweryDB API Key:  8a2157f57773e1804749e5370a40a584
-//=================================================
-
-    // ajax call to beerspot
-        //get a beer of the type we want
-
-
-
-
-
-
-
-
 
 
 //=================================================
 // display shit
-// takes brewery obj from yelp and beer name from beerspot
+// takes brewery obj
 // no return, displays stuff on the DOM
-// future features: beer description, specs + taste
+// future features
 //=================================================
-function displayInfo(){
-    //display beer name
-    //display brewery name
-    //display address
-    //uber button
-        // optional: passes address data from yelp obj
+function displayInfo(brewery){
+	//brewery name
+	$("#brewery").html(brewery.name);
+	$("#description").html("Rating: " + brewery.rating + "<br>");
+	$("#address").append(brewery.address);
 }
-    
-    
-    
-    
+
+
+
+
+//=================================================
+// google maps obj
+// has 3 functions: initialize the map, search for breweries and display the results map
+// has 1 property: theMap -- map obj for google API
+//=================================================
+var map = {
+
+	theMap: new google.maps.Map(document.getElementById('map'), {
+		  zoom: 4,
+		  //default map - locates 92110
+		  center: {lat: 32.7657, lng: -117.2}
+		}),
+	
+//=================================================
+// initialize map
+// generates default map view
+// no return, displays map on the DOM
+//=================================================	
+	initMap: function() {
+		//pull geolocation data from device
+		var infoWindow = new google.maps.InfoWindow({map: map.theMap});
+		if (navigator.geolocation) {
+		  navigator.geolocation.getCurrentPosition(function(position) {
+		    var pos = {
+		      lat: position.coords.latitude,
+		      lng: position.coords.longitude
+		    };
+		
+		    infoWindow.setPosition(pos);
+		    map.theMap.setCenter(pos);
+		  }, function() {
+		    handleLocationError(true, infoWindow, map.theMap.getCenter());
+		  });
+		}
+	},
+	
 //=================================================
 // display map
 // takes address
@@ -300,20 +289,117 @@ function displayInfo(){
 // Google Maps API Key: AIzaSyBiS9ErA4DRXHTheds5mVXS45lyf5lpbcs
 //=================================================
 
-function displayMap(address){
-	var place = encodeURI(address);
-	var latlong = {
-        	lat: response.results[0].geometry.location.lat,
-			lng : response.results[0].geometry.location.lng
-        };
-	var map = google.maps.Map(document.getElementById('map'), {
-		    center: latlong,
-		    zoom: 4
-		  });
-	var marker = new google.maps.Marker({
-          position: latlong,
-          map: map
-        });
+	displayMap: function (address){
+		var place = encodeURI(address);
+		$.ajax({
+		    url: "https://maps.googleapis.com/maps/api/geocode/json?address="+ place
+		    +"&key=AIzaSyDwJEzk5FbNL1fwKBxifUONzQMvDdYShqs",
+		    method: "GET"
+		}).done(function(response){
+		    //get latitude/longitude points from zip code
+			var latlong = {
+				latitude: response.results[0].geometry.location.lat,
+				longitude: response.results[0].geometry.location.lng
+			};
+			
+			//google maps shenanigams - display new marker
+			map.theMap = google.maps.Map(document.getElementById('map'), {
+				    center: latlong,
+				    zoom: 4
+				  });
+			var marker = new google.maps.Marker({
+		          position: latlong,
+		          map: map.theMap
+		        });
+		});
+	},
+
+//=================================================
+// google places caller
+// takes a 5-digit int or string, must be valid zip code
+// returns an obj containing name and address of highest-rated nearby breweries
+// return obj = { name : [String], address : [String], rate : [String]}
+// api key:AIzaSyDwJEzk5FbNL1fwKBxifUONzQMvDdYShqs
+// //=================================================
+	
+	callMap: function(zip){
+		var longitude;
+		var latitude;
+		var ret;
+		
+		//get location data
+		$.ajax({
+		    url: "https://maps.googleapis.com/maps/api/geocode/json?address="+ zip
+		    +"&key=AIzaSyDwJEzk5FbNL1fwKBxifUONzQMvDdYShqs",
+		    method: "GET"
+			}).done(function(response){
+			    //get latitude/longitude points from zip code
+				latitude = response.results[0].geometry.location.lat;
+				longitude = response.results[0].geometry.location.lng;
+				
+				//set up google map for query
+				var loc = new google.maps.LatLng(latitude, longitude);
+				map.theMap = new google.maps.Map(document.getElementById('map'), {
+				    center: loc,
+				    zoom: 4
+				  });
+				  
+				//query specs : location: based on zip, radius: 5km, term: brewery
+				var request = {
+				    location: loc,
+				    radius: '5000',
+					query: 'brewery',
+					type: 'brewery'
+				};
+		
+				//google places library call
+				var service = new google.maps.places.PlacesService(map.theMap);
+				service.textSearch(request, function(results, status) {
+					if (status == google.maps.places.PlacesServiceStatus.OK) {
+						var rate = [0,0,0];
+						var theSpot = ["","",""];
+						var address = ["","",""];
+						//find highest rated brewery
+					    for (var i = 0; i < results.length; i++) {
+					    	//check rating
+				    		for(var j=0; j<3; j++){
+					    		if(rate[j]<results[i].rating){
+					    			//last check
+					    			if(j==2){
+					    			rate[j] = results[i].rating;
+									address[j] = results[i].formatted_address;
+									theSpot[j] = results[i].name;
+					    			}
+					    			//middle check
+					    			else if( j==1){
+						    			rate[j+1] = rate[j];
+						    			address[j+1] = address[j];
+						    			theSpot[j+1] = theSpot [j];
+						    			rate[j] = results[i].rating;
+										address[j] = results[i].formatted_address;
+										theSpot[j] = results[i].name;
+									}
+									//highest rated!!
+									else{
+										rate[j+2] = rate[j+1];
+						    			address[j+2] = address[j+1];
+						    			theSpot[j+2] = theSpot [j+1];
+						    			rate[j+1] = rate[j];
+						    			address[j+1] = address[j];
+						    			theSpot[j+1] = theSpot [j];
+						    			rate[j] = results[i].rating;
+										address[j] = results[i].formatted_address;
+										theSpot[j] = results[i].name;									
+									}
+									break;
+					    		}
+					    	}
+					    }
+					    //build out return obj
+					    ret = { name: theSpot, address: address, rating: rate };
+					    return ret;
+						}
+				});
+			});
+	}
 }
-
-

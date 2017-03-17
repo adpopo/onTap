@@ -13,11 +13,11 @@
     <script type="text/javascript" src="assets/javascript/onTap.js"></script>
     <!--map stuff-->
     <style>
-      #map {
+    #map {
         width: 250px;
         height: 250px;
         background-color: grey;
-      }
+    }
     </style>
     <link rel="stylesheet" type="text/css" href="assets/css/reset.css">
     <link rel="stylesheet" type="text/css" href="assets/css/style.css">
@@ -38,44 +38,54 @@
                 </form>
             </div>
         </section>
-    </div>
-    <!-- end of .container -->
-    <section class="row no-gutters">
-        <div class="col-md-3 col-xs-3"></div>
-        <div class="col-md-2 col-xs-2">
-            <img type="button" id="dark" class="img-rounded" src="assets/images/dark.png" alt="dark" height="100">
-        </div>
-        <div class="col-md-2 col-xs-2">
-            <img id="medium" class="img" src="assets/images/med.png" alt="medium">
-        </div>
-        <div class="col-md-2 col-xs-2">
-            <img id="light" class="img-rounded" src="assets/images/light.png" alt="light">
-        </div>
-        <div class="col-md-2 col-xs-1">
-            <img id="handle" class="img-rounded" src="assets/images/handle.png" alt="handle">
-        </div>
-    </section>
-    <!--"choose your beer"-->
-    <!--beers-->
-    <!--light-->
-    <!--med-->
-    <!--dark-->
-    <!--display results-->
-    <div id="searchResults"></div>
-    <!--brewery name-->
-    <div id="brewery"></div>
-    <!--beer name-->
-    <div id="beer"></div>
-    <!--description-->
-    <div id="description"></div>
-    <!--details-->
-    <div id="details"></div>
-    <!--address-->
-    <div id="address"></div>
-    <!--map-->
-    <div id="map"></div>
+        
+        <section class="row no-gutters" id="beers">
+            <div class="col-md-3 col-xs-3"></div>
+            <div class="col-md-2 col-xs-2">
+                <img type="button" id="dark" class="img-rounded" src="assets/images/darkf.png" alt="dark" height="100">
+            </div>
+            <div class="col-md-2 col-xs-2">
+                <img id="medium" class="img" src="assets/images/medf.png" alt="medium">
+            </div>
+            <div class="col-md-2 col-xs-2">
+                <img id="light" class="img-rounded" src="assets/images/lightf.png" alt="light">
+            </div>
+            <div class="col-md-2 col-xs-1">
+                <img id="handle" class="img-rounded" src="assets/images/handle.png" alt="handle">
+            </div>
+        </section>
+        <br>
+        <!--"choose your beer"-->
+        <!--beers-->
+        <!--light-->
+        <!--med-->
+        <!--dark-->
+        <section id="results" class="row no-gutters dblgradbox">
+            <!--display results-->
+            <div id="searchResults"></div>
+            <!--brewery name-->
+            <div id="brewery">Brewery Name</div>
+            <!--beer name-->
+            <div id="beer">beer name</div>
+            <!--description-->
+            <div id="description">beer description</div>
+            <!--details-->
+            <div id="details">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque orci dui, blandit vel justo et, maximus tempus nisi. Curabitur ac tempor sem. Integer maximus, enim vitae feugiat sollicitudin, sapien enim convallis dolor, sed interdum mauris purus ut augue. Suspendisse mollis augue ligula, sed tristique quam venenatis ac. Etiam fringilla finibus massa, non pulvinar odio. Vivamus nulla elit, malesuada ac ornare sit amet, egestas id neque. In quis purus ac augue malesuada lobortis nec quis erat. Pellentesque vel tortor et neque scelerisque commodo. Etiam eu quam est. Integer dignissim arcu non tellus ullamcorper consectetur.</div>
+            <!--additional details-->
+            <div id="details"><span id="abv">abv. 100%</span><span id="ibu">ibu <9000</spand><span id="type">type: generic beer</span></div>
+            <div id="location">
+                <!--address-->
+                <div id="address">
+                    <h2>Where to Find:</h2><br>
+                <!--map-->
+                <div id="map"></div>
+            </div>
+            <!-- end of #location -->
     </div>
     <!--uber/lyft button-->
+    </section>
+    </div>
+    <!-- end of .container -->
     <footer>
         <div class="copy">
             Copyright &copy; themostamazinggroup 2017
@@ -83,39 +93,11 @@
     </footer>
     <!--list of some sort - history, favorites, etc-->
     </div>
-    
-    
-    <!--google maps display shit-->
-    <script>
-      function initMap() {
-        //default map - locates 92110
-        var home = {lat: 32.7657, lng: -117.2};
-        
-        var map = new google.maps.Map(document.getElementById('map'), {
-          zoom: 4,
-          center: home
-        });
-        
-        //pull geolocation data from device
-        var infoWindow = new google.maps.InfoWindow({map: map});
-        if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(function(position) {
-            var pos = {
-              lat: position.coords.latitude,
-              lng: position.coords.longitude
-            };
-
-            infoWindow.setPosition(pos);
-            map.setCenter(pos);
-          }, function() {
-            handleLocationError(true, infoWindow, map.getCenter());
-          });
-        }
-      }
-      
-    </script>
-    <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDwJEzk5FbNL1fwKBxifUONzQMvDdYShqs&callback=initMap">
+    <!--google maps display-->
+ 
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDwJEzk5FbNL1fwKBxifUONzQMvDdYShqs&callback=initMap">
     </script>
 </body>
+
 </html>
+
