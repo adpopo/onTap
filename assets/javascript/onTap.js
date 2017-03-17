@@ -404,3 +404,5 @@ var map = {
 			});
 	}
 }
+
+var initMap = map.initMap();
