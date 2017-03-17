@@ -106,7 +106,7 @@ function parseZip(){
     // take zip code
     var zip = $("#ex3").val();
     // check if a legit zip code
-    if(zip.length != 5 || !isNaN(zip)){
+    if(zip.length != 5 || isNaN(zip)){
         return false;
     }
     zip = parseInt(zip);
