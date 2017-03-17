@@ -60,7 +60,13 @@ body {
 #handle {
 	height: 400px;
 }
+
 #dark {
+	height: auto;
+	width: 90%;
+}
+
+.dark{
 	height: 400px;
 	background: #6b3f18; /* For browsers that do not support gradients */
     background: -webkit-linear-gradient(#6b3f18, #2e1906); /* For Safari 5.1 to 6.0 */
@@ -69,7 +75,12 @@ body {
     background: linear-gradient(#6b3f18, #2e1906); /* Standard syntax (must be last) */
 }
 
-#medium {
+#medium{
+	height: auto;
+	width: 90%;
+}
+
+.medium {
 	height: 400px;
     background: #fa9620 ; /* For browsers that do not support gradients */
     background: -webkit-linear-gradient(#fa9620 , #cd421c); /* For Safari 5.1 to 6.0 */
@@ -78,7 +89,12 @@ body {
     background: linear-gradient(#fa9620 , #cd421c); /* Standard syntax (must be last) */
 }
 
-#light {
+#light{
+	height: auto;
+	width: 90%;
+}
+
+.light {
 	height: 400px;
 	background: #ffbd31 ; /* For browsers that do not support gradients */
     background: -webkit-linear-gradient(#ffbd31 , #d5741d); /* For Safari 5.1 to 6.0 */

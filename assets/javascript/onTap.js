@@ -63,7 +63,8 @@ $("#beers").on("click", "#light", function(){
 
 
 function onClick(beerType){
-    
+    console.log(map);
+
     // zip handler
     var zip = parseZip();
     if(zip==false){
@@ -260,8 +261,8 @@ var map = {
 		}),
 	pos: {lat: 32.7657, lng: -117.2},
 	marker: new google.maps.Marker({
-		          position: latlong,
-		          map: map.theMap
+		          position: this.pos,
+		          map: this.theMap
 		        }),
 //=================================================
 // initialize map
@@ -272,11 +273,12 @@ var map = {
 		//pull geolocation data from device;
 		if (navigator.geolocation) {
 		  navigator.geolocation.getCurrentPosition(function(position) {
-		    this.pos = {
+		    map.pos = {
 		      lat: position.coords.latitude,
 		      lng: position.coords.longitude
 		    };
-			this.theMap.setCenter(this.pos);
+		    console.log(map);
+			map.theMap.setCenter(map.pos);
 		  }, function() {
 		    handleLocationError(true, infoWindow, map.theMap.getCenter());
 		  });
