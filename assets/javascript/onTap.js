@@ -48,15 +48,15 @@
 // listens to click event from the big div with all the beer types
 // dynamically generates the "menu" style thing at the bottom
 //=================================================
-$("#beers").on("click", "#dark", function{
+$("#beers").on("click", "#dark", function(){
 	onClick("dark");
 	});
 
-$("#beers").on("click", "#medium", function{
+$("#beers").on("click", "#medium", function(){
 	onClick("medium");
 	});
 
-$("#beers").on("click", "#light", function{
+$("#beers").on("click", "#light", function(){
 	onClick("light");
 	});
 
@@ -71,7 +71,7 @@ function onClick(beerType){
     }
 
     // google caller (zip code)
-    var locations = map.callMap(zip);
+    var locations = map.findBreweries(zip);
     
     // brewerydb confirm (location obj, beer type)
     var brewery = breweryDB.confirmBrewery(locations, zip);
@@ -194,7 +194,7 @@ var breweryDB = {
 // returns object with brewery name as String, brewery address as String, brewery rating as float and index of brewery
 // return format obj = { Name: name, address: address, rating: #.#, index: #}
 //=================================================
-	function confirmBrewery(breweries, zip){
+	confirmBrewery: function(breweries, zip){
 	//search BreweryDB API for breweries matching top rated
 		$.ajax({
 			method: "POST",
@@ -258,24 +258,25 @@ var map = {
 		  //default map - locates 92110
 		  center: {lat: 32.7657, lng: -117.2}
 		}),
-	
+	pos: {lat: 32.7657, lng: -117.2},
+	marker: new google.maps.Marker({
+		          position: latlong,
+		          map: map.theMap
+		        }),
 //=================================================
 // initialize map
 // generates default map view
 // no return, displays map on the DOM
 //=================================================	
 	initMap: function() {
-		//pull geolocation data from device
-		var infoWindow = new google.maps.InfoWindow({map: map.theMap});
+		//pull geolocation data from device;
 		if (navigator.geolocation) {
 		  navigator.geolocation.getCurrentPosition(function(position) {
-		    var pos = {
+		    this.pos = {
 		      lat: position.coords.latitude,
 		      lng: position.coords.longitude
 		    };
-		
-		    infoWindow.setPosition(pos);
-		    map.theMap.setCenter(pos);
+			this.theMap.setCenter(this.pos);
 		  }, function() {
 		    handleLocationError(true, infoWindow, map.theMap.getCenter());
 		  });
@@ -303,11 +304,11 @@ var map = {
 			};
 			
 			//google maps shenanigams - display new marker
-			map.theMap = google.maps.Map(document.getElementById('map'), {
+			this.theMap = google.maps.Map(document.getElementById('map'), {
 				    center: latlong,
 				    zoom: 4
 				  });
-			var marker = new google.maps.Marker({
+			this.marker = new google.maps.Marker({
 		          position: latlong,
 		          map: map.theMap
 		        });
@@ -322,7 +323,7 @@ var map = {
 // api key:AIzaSyDwJEzk5FbNL1fwKBxifUONzQMvDdYShqs
 // //=================================================
 	
-	callMap: function(zip){
+	findBreweries: function(zip){
 		var longitude;
 		var latitude;
 		var ret;
@@ -339,7 +340,7 @@ var map = {
 				
 				//set up google map for query
 				var loc = new google.maps.LatLng(latitude, longitude);
-				map.theMap = new google.maps.Map(document.getElementById('map'), {
+				this.theMap = new google.maps.Map(document.getElementById('map'), {
 				    center: loc,
 				    zoom: 4
 				  });
