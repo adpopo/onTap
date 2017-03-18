@@ -38,7 +38,17 @@
 //=================================================
 
 
-
+//=================================================
+//various variables
+//holds variables for brewery object, beers object, beer type, zip code
+//=================================================
+var output = {
+	brewery: {},
+	confirmedBrewery: null,
+	beers: {},
+	beerType: "",
+	zip : 92110
+};
 
 
 
@@ -63,36 +73,46 @@ $("#beers").on("click", "#light", function(){
 
 
 function onClick(beerType){
-    console.log(map);
+    output.beerType = beerType;
 
     // zip handler
-    var zip = parseZip();
-    if(zip==false){
+    output.zip = parseZip();
+    if(output.zip==false){
         //error message
     }
-
-    // google caller (zip code)
-    var locations = map.findBreweries(zip);
     
-    // brewerydb confirm (location obj, beer type)
-    var brewery = breweryDB.confirmBrewery(locations, zip);
-    
-    // display shit (location obj)
-    displayInfo(brewery);
-    
-    // brewerydb beer finder
-    breweryDB.beerLookup(brewery.name, beerType, function(beers){
-    	//display beer
-    	$("#beer").html(beers[i].name);
-    	$("#description").html(beers[i].style.category.name);
-    	$("#description").append("<br>");
-    	$("#description").append(beers[i].style.description);
-    	$("#details").html(beers[i].description);
-    })
-
-    // map display (location obj)
-	map.displayMap(brewery.address[brewery.index]);
+    //deferred function shit, find yo brewery/beers
+    map.findBreweries(output.zip).then(function(){
+    	breweryDB.confirmBrewery().then(function(){
+	    	var useIndex = (output.confirmedBrewery == null) ? 0 : output.confirmedBrewery;
+		    // brewerydb beer finder
+		    breweryDB.beerLookup(output.brewery.name[useIndex], output.beerType, function(){
+		    	//display beer
+		    	$("#brewery").empty();
+		    	$("#brewery").html(output.brewery.name[useIndex]);
+		    	$("#beer").empty();
+		    	$("#beer").html(output.beers[0].name);
+		    	$("#description").empty();
+		    	$("#description").html(output.beers[0].style.description);
+		    	$("#description").append("<br>");
+		    	$("#description").append("Rating: " + output.brewery.rating[0]);
+		    	$("#abv").empty();
+		    	$("#abv").html("abv: " + output.beers[0].abv + "%");
+		    	$("#ibu").empty();
+		    	$("#ibu").html("ibu: " + output.beers[0].style.ibuMax);
+		    	$("#beerType").empty();
+		    	$("#beerType").html("Type: " + output.beers[0].style.category.name);
+		    	$("#details").empty();
+		    	$("#details").html(output.beers[0].description);
+		    	$("#address").empty();
+		    	$("#address").append(output.brewery.address[useIndex]);
+		    	// map display (location obj)
+				map.displayMap(output.brewery.address[useIndex]);
+			});
+	    });
+    });
 }
+
 
 
 //=================================================
@@ -150,32 +170,28 @@ var breweryDB = {
 			  	url: queryURL
 			  },
             success: function (response) {
-                console.log(response);
                 var brewResults = response;
                 var userSearch = brewResults.data.data;
-                console.log(userSearch);
                 
                 if (self.beerTypes.hasOwnProperty(beerType)) {
-                	console.log(beerType);
                     // empty array to hold top three results
                     var indexArray = [];
                 	// looping through results to return data specified by user
                     for (var i = 0; i < userSearch.length; i++) {
-                        if (self.beerTypes[beerType].indexOf(userSearch[i].style.name) >= 0) {
-                            indexArray.push(userSearch[i]);              
+                        if (typeof userSearch[i].style == "object" && userSearch[i].style.hasOwnProperty('name')) {
+                            indexArray.push(userSearch[i]);   
                             if (indexArray.length >= 3) {
                                 break;
 
                             }
                         }
                     }
-                    console.log(indexArray);
+                    output.beers = indexArray;
                     cb(indexArray);
                 }
 
             },
             error: function(e) {
-               console.log(e);
                cb(false);
             }
         });
@@ -195,55 +211,49 @@ var breweryDB = {
 // returns object with brewery name as String, brewery address as String, brewery rating as float and index of brewery
 // return format obj = { Name: name, address: address, rating: #.#, index: #}
 //=================================================
-	confirmBrewery: function(breweries, zip){
-	//search BreweryDB API for breweries matching top rated
-		$.ajax({
-			method: "POST",
-			dataType: "json",
-			url: "https://proxy-cbc.herokuapp.com/proxy",
-			data: {
-		   		url: "http://api.brewerydb.com/v2/locations?key='8a2157f57773e1804749e5370a40a584'&postalCode=" + zip
-		  	}
-		})
+confirmBrewery: function(){
+//search BreweryDB API for breweries matching top rated
+	return $.ajax({
+		method: "POST",
+		dataType: "json",
+		url: "https://proxy-cbc.herokuapp.com/proxy",
+		data: {
+	   		url: "http://api.brewerydb.com/v2/locations?key=8a2157f57773e1804749e5370a40a584&postalCode=" + output.zip
+	  	}
+	})
 		.done(function(response){
 			//loop through breweries in response data
-			for(var i = 0; i<response.data.length; i++){
+			for(var i = 0; i<response.data.data.length; i++){
 				//loop through breweries in input data
-				for(var j = 0; j < breweries.name.length ; j++){
+				for(var j = 0; j < output.brewery.name.length ; j++){
 					//if response.name == breweries.name[i]
-					if(response.data[i].name == breweries.name[j]){
+					if(response.data.data[i].name == output.brewery.name[j]){
 						//build out return obj
-						var ret = { name: breweries.name[j],
-									address: breweries.address[j],
-									rating: breweries.rating[i],
+						var ret = { name: output.brewery.name[j],
+									address: output.brewery.address[j],
+									rating: output.brewery.rating[i],
 									index:i
 						};
 						//return
-						return ret;
+						output.confirmedBrewery = j;
+						return true;
 					}
 					else{
 						return false;
 					}
 				}
 			}
+			if(output.confirmedBrewery == undefined){
+				output.confirmedBrewery = {
+					name: "Unable to Find a brewery",
+					address: "Unable to Find a brewery",
+					rating: 0,
+					index:0
+				}
+			}
 		});
 	}
 }
-
-
-//=================================================
-// display shit
-// takes brewery obj
-// no return, displays stuff on the DOM
-// future features
-//=================================================
-function displayInfo(brewery){
-	//brewery name
-	$("#brewery").html(brewery.name);
-	$("#description").html("Rating: " + brewery.rating + "<br>");
-	$("#address").append(brewery.address);
-}
-
 
 
 
@@ -255,7 +265,7 @@ function displayInfo(brewery){
 var map = {
 
 	theMap: new google.maps.Map(document.getElementById('map'), {
-		  zoom: 4,
+		  zoom: 15,
 		  //default map - locates 92110
 		  center: {lat: 32.7657, lng: -117.2}
 		}),
@@ -277,7 +287,6 @@ var map = {
 		      lat: position.coords.latitude,
 		      lng: position.coords.longitude
 		    };
-		    console.log(map);
 			map.theMap.setCenter(map.pos);
 		  }, function() {
 		    handleLocationError(true, infoWindow, map.theMap.getCenter());
@@ -308,7 +317,7 @@ var map = {
 			//google maps shenanigams - display new marker
 			this.theMap = google.maps.Map(document.getElementById('map'), {
 				    center: latlong,
-				    zoom: 4
+				    zoom: 15
 				  });
 			this.marker = new google.maps.Marker({
 		          position: latlong,
@@ -331,7 +340,7 @@ var map = {
 		var ret;
 		
 		//get location data
-		$.ajax({
+		return $.ajax({
 		    url: "https://maps.googleapis.com/maps/api/geocode/json?address="+ zip
 		    +"&key=AIzaSyDwJEzk5FbNL1fwKBxifUONzQMvDdYShqs",
 		    method: "GET"
@@ -344,7 +353,7 @@ var map = {
 				var loc = new google.maps.LatLng(latitude, longitude);
 				this.theMap = new google.maps.Map(document.getElementById('map'), {
 				    center: loc,
-				    zoom: 4
+				    zoom: 15
 				  });
 				  
 				//query specs : location: based on zip, radius: 5km, term: brewery
@@ -398,9 +407,8 @@ var map = {
 					    		}
 					    	}
 					    }
-					    //build out return obj
-					    ret = { name: theSpot, address: address, rating: rate };
-					    return ret;
+					    output.brewery = { name: theSpot, address: address, rating: rate };
+					    return true;
 						}
 				});
 			});

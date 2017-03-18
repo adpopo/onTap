@@ -57,6 +57,23 @@ body {
 	
 }
 
+#cider {
+	position: relative;
+	top: 0;
+	width: 100%;
+	height: 200px;
+}
+
+#weird {
+	
+	top: 10px;
+	width: 100%;
+	height: 200px;
+	position: relative;
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
 #handle {
 	height: 400px;
 }
@@ -133,7 +150,7 @@ body {
 
 @media screen and (max-width: 800px){
 	.cloud-container {
-		width: 400x;
+		width: 400px;
 		height: 200px;
 }
 	
@@ -161,6 +178,13 @@ body {
 	min-height: 300px;
 }
 
+#addDetails {
+	clear: both;
+	display: inline-block;
+	overflow: hidden;
+    white-space: nowrap;
+}
+
 .dblgradbox {
 	margin: auto;
 	padding: 15px;
@@ -173,3 +197,7 @@ body {
 	background-position: 0 0, 100% 0;
 	background-repeat: no-repeat;
 	border-radius: 7px;
+	font-family: Didot Regular;
+	font-size: 16px;
+	color: white;
+}
