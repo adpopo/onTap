@@ -319,16 +319,13 @@ var map = {
 		}).done(function(response){
 		    //get latitude/longitude points from zip code
 			var latlong = {
-				latitude: response.results[0].geometry.location.lat,
-				longitude: response.results[0].geometry.location.lng
+				lat: response.results[0].geometry.location.lat,
+				lng: response.results[0].geometry.location.lng
 			};
 			
 			//google maps shenanigams - display new marker
-			this.theMap = google.maps.Map(document.getElementById('map'), {
-				    center: latlong,
-				    zoom: 15
-				  });
-			this.marker = new google.maps.Marker({
+			this.theMap.setCenter( latlong.lat, latlong.lng);
+			var marker1 = new google.maps.Marker({
 		          position: latlong,
 		          map: map.theMap
 		        });
