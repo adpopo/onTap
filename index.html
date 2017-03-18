@@ -36,11 +36,10 @@
                 </form>
             </div>
         </section>
-        
         <section class="row no-gutters" id="beers">
             <div class="col-md-3 col-xs-3">
-            <img type="button" id="cider" class="img-small" src="assets/images/cider.png" alt="cider">
-                  <img type="button" id="weird" class="img-small" src="assets/images/weird.png" alt="weird">
+                <img type="button" id="cider" class="img-small" src="assets/images/cider.png" alt="cider">
+                <img type="button" id="weird" class="img-small" src="assets/images/weird.png" alt="weird">
             </div>
             <div class="col-md-2 col-xs-2">
                 <img type="button" id="dark" class="img-rounded" src="assets/images/darkf.png" alt="dark" height="100">
@@ -65,26 +64,45 @@
             <!--display results-->
             <div id="searchResults"></div>
             <!--brewery name-->
-            <div id="brewery">Brewery Name</div>
+            <div id="brewery">•Brewery Name•</div>
             <!--beer name-->
-            <div id="beer">Beer name</div>
+            <div id="beer">▬▬▬▬ Beer name ▬▬▬▬</div>
             <!--description-->
             <div id="description">Beer description</div>
             <!--details-->
             <div id="details"></div>
             <!--additional details-->
-            <div id="addDetails"><span id="abv">abv. 100%</span><span id="ibu">ibu <9000</spand><span id="type">type: generic beer</span></div>
+            <hr>
+            <ul class="list-inline">
+                <li class="list-inline-item">abv.</li>
+                <li class="list-inline-item">ibu &lt;</li>
+                <li class="list-inline-item">type</li>
+            </ul>
+            <hr>
             <div id="location">
                 <!--address-->
                 <div id="address">
-                    <h2>Where to Find:</h2><br>
+                    <hr>
+                    <h2>Where to Find:</h2>
+                    <br>
                 </div>
                 <!--map-->
                 <div id="map"></div>
             </div>
             <!-- end of #location -->
     </div>
+    <br>
+    <br>
     <!--uber/lyft button-->
+    <section class=drunks>
+        <div class=row>
+            <div class="col-md-1 col-sm-1 col-xs-1"></div>
+            <div class="col-md-2 col-sm-2 col-xs-2">
+                <img class="lyft" src="assets/images/lyft.png" alt="lyft">
+            </div>
+            <div class="col-md-2 col-sm-2 col-xs-2">
+                <img class="uber" src="assets/images/uber.png" alt="uber">
+            </div>
     </section>
     </div>
     <!-- end of .container -->
@@ -95,14 +113,10 @@
     </footer>
     <!--list of some sort - history, favorites, etc-->
     </div>
-    
-    
     <!--google maps display-->
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDwJEzk5FbNL1fwKBxifUONzQMvDdYShqs&libraries=places">
+    <script id="maps" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDwJEzk5FbNL1fwKBxifUONzQMvDdYShqs&libraries=places">
     </script>
-    
     <script type="text/javascript" src="assets/javascript/onTap.js"></script>
 </body>
 
 </html>
-
