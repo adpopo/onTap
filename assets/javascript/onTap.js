@@ -154,7 +154,7 @@ function parseZip(){
 //=================================================
 
 var breweryDB = {
-    breweryKey: "8a2157f57773e1804749e5370a40a584",
+    breweryKey: "7f075813ee83da31d58608f5b808f31d",
     brewQueryURL: "https://api.brewerydb.com/v2/search?&format=json&",
     
     
@@ -227,7 +227,7 @@ confirmBrewery: function(){
 		dataType: "json",
 		url: "https://proxy-cbc.herokuapp.com/proxy",
 		data: {
-	   		url: "http://api.brewerydb.com/v2/locations?key=8a2157f57773e1804749e5370a40a584&postalCode=" + output.zip
+	   		url: "http://api.brewerydb.com/v2/locations?key=7f075813ee83da31d58608f5b808f31d&postalCode=" + output.zip
 	  	}
 	})
 		.done(function(response){
