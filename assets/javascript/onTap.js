@@ -70,6 +70,14 @@ $("#beers").on("click", "#light", function(){
 	onClick("light");
 	});
 
+$("#beers").on("click", "#weird", function(){
+	onClick("weird");
+	});
+
+$("#beers").on("click", "#cider", function(){
+	onClick("cider");
+	});
+
 
 
 function onClick(beerType){
