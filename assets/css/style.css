@@ -1,203 +1,304 @@
 /*Dark Beer Color gradient: #6b3f18 (top) to #2e1906 (bottom) */
+
+
 /*Medium Beer Color gradient: #fa9620 (top) to #cd421c (bottom) */
+
+
 /*Light Beer Color gradient: #ffbd31 (top) to #d5741d (bottom) */
 
 @font-face {
- 	font-family: BIG JOHN; 
- 	src: url('BIG JOHN.otf'); 
- }
- 
-@font-face {
- 	font-family: Didot Regular; 
- 	src: url('Didot Regular.ttf'); 
- }
+    font-family: BIG JOHN;
+    src: url('BIG JOHN.otf');
+}
 
+@font-face {
+    font-family: Didot Regular;
+    src: url('Didot Regular.ttf');
+}
 
 body {
- background-image: url("wood_table.jpg");
- background-repeat: no-repeat;
- background-attachment: fixed;
+    background-image: url("wood_table.jpg");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
 }
 
 .center-block {
-	height: auto;
-	width: auto;
-    }
+    height: auto;
+    width: auto;
+}
 
 #topLogo {
     overflow: hidden;
-    height: auto;
+    height: 10%;
 }
 
-
-#ex3{
-	text-align: center;
-	background-color: #f29947;
-	border-color: white;
-	font-size: 20px;
-	font-family:BIG JOHN;
-	width: 100px;
+#ex3 {
+    text-align: center;
+    background-color: #f29947;
+    border-color: white;
+    font-size: 20px;
+    font-family: BIG JOHN;
+    width: 100px;
 }
 
 ::-webkit-input-placeholder {
-	color: white !important;
+    color: white !important;
 }
 
-.form-control{
-	color:white !important;
-	display: block;
-	
+.form-control {
+    color: white !important;
+    display: block;
 }
 
-.img-rounded, .img {
-	display: inline-block;
-	width: 100%;
-	height: 50px;
-	position: relative;
-	
+.img-rounded,
+.img {
+	padding-bottom: -2%;
+    display: inline-block;
+    width: 100%;
+    height: 50px;
+    position: relative;
 }
 
 #cider {
-	position: relative;
-	top: 0;
-	width: 100%;
-	height: 200px;
+    position: relative;
+    top: 0;
+    width: 100%;
+    height: 200px;
 }
 
 #weird {
-	
-	top: 10px;
-	width: 100%;
-	height: 200px;
-	position: relative;
-	padding-left: 10px;
-	padding-right: 10px;
+    top: 10px;
+    width: 100%;
+    height: 200px;
+    position: relative;
+    padding-left: 10px;
+    padding-right: 10px;
 }
 
 #handle {
-	height: 400px;
+    height: 400px;
 }
+
 #dark {
-	height: 400px;
-	background: #6b3f18; /* For browsers that do not support gradients */
-    background: -webkit-linear-gradient(#6b3f18, #2e1906); /* For Safari 5.1 to 6.0 */
-    background: -o-linear-gradient(#6b3f18, #2e1906); /* For Opera 11.1 to 12.0 */
-    background: -moz-linear-gradient(#6b3f18, #2e1906); /* For Firefox 3.6 to 15 */
-    background: linear-gradient(#6b3f18, #2e1906); /* Standard syntax (must be last) */
+	border-radius: 15px 0px 0px 15px;
+    height: 400px;
+    background: #6b3f18;
+    /* For browsers that do not support gradients */
+    background: -webkit-linear-gradient(#6b3f18, #2e1906);
+    /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(#6b3f18, #2e1906);
+    /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(#6b3f18, #2e1906);
+    /* For Firefox 3.6 to 15 */
+    background: linear-gradient(#6b3f18, #2e1906);
+    /* Standard syntax (must be last) */
 }
 
 #medium {
-	height: 400px;
-    background: #fa9620 ; /* For browsers that do not support gradients */
-    background: -webkit-linear-gradient(#fa9620 , #cd421c); /* For Safari 5.1 to 6.0 */
-    background: -o-linear-gradient(#fa9620 , #cd421c); /* For Opera 11.1 to 12.0 */
-    background: -moz-linear-gradient(#6b3f18, #cd421c); /* For Firefox 3.6 to 15 */
-    background: linear-gradient(#fa9620 , #cd421c); /* Standard syntax (must be last) */
+	border-radius: 0px;
+    height: 400px;
+    background: #fa9620;
+    /* For browsers that do not support gradients */
+    background: -webkit-linear-gradient(#fa9620, #cd421c);
+    /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(#fa9620, #cd421c);
+    /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(#6b3f18, #cd421c);
+    /* For Firefox 3.6 to 15 */
+    background: linear-gradient(#fa9620, #cd421c);
+    /* Standard syntax (must be last) */
 }
 
 #light {
-	height: 400px;
-	background: #ffbd31 ; /* For browsers that do not support gradients */
-    background: -webkit-linear-gradient(#ffbd31 , #d5741d); /* For Safari 5.1 to 6.0 */
-    background: -o-linear-gradient(#ffbd31 , #d5741d); /* For Opera 11.1 to 12.0 */
-    background: -moz-linear-gradient(#ffbd31, #d5741d); /* For Firefox 3.6 to 15 */
-    background: linear-gradient(#ffbd31 , #d5741d); /* Standard syntax (must be last) */
+	border-radius: 0px 15px 15px 0px;
+    height: 400px;
+    background: #ffbd31;
+    /* For browsers that do not support gradients */
+    background: -webkit-linear-gradient(#ffbd31, #d5741d);
+    /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(#ffbd31, #d5741d);
+    /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(#ffbd31, #d5741d);
+    /* For Firefox 3.6 to 15 */
+    background: linear-gradient(#ffbd31, #d5741d);
+    /* Standard syntax (must be last) */
 }
-
-
 
 .row.no-gutters {
-  margin-right: 0;
-  margin-left: 0;
+    margin-right: 0;
+    margin-left: 0;
+    
 }
+
 .row.no-gutters > [class^="col-"],
 .row.no-gutters > [class*=" col-"] {
-  padding-right: 0;
-  padding-left: 0;
+    padding-right: 0;
+    padding-left: 0;
+    
+
 }
 
-
 .copy {
-	color: white;
-	font-family: Didot Regular;
-	font-size: 25px;
-	text-align: center;
-	padding: 20px;
+    color: white;
+    font-family: Didot Regular;
+    font-size: 25px;
+    text-align: center;
+    padding: 20px;
 }
 
 .cloud-container {
-	background-image: url("../images/cloud.png");
-	background-position: center center;
-	background-size: contain;
-	background-repeat: no-repeat;
-	height: 275px;
-	width: 100%;
-	margin: 314px auto -25px;
-	position: relative;
-	
+    background-image: url("../images/cloud.png");
+    background-position: center center;
+    background-size: contain;
+    background-repeat: no-repeat;
+    height: 275px;
+    width: 100%;
+    margin: 314px auto -25px;
+    position: relative;
 }
 
 @media screen and (max-width: 991px) {
-	.cloud-container {
-		margin: 0px;
-		margin-top: -20px;
-		
-		margin-bottom: -25px;
-
-	}
-	
+    .cloud-container {
+    	background-position: bottom;
+        margin: 0px;
+        margin-top: -20px;
+        margin-bottom: -25px;
+    }
 }
 
-@media screen and (max-width: 800px){
-	.cloud-container {
-		width: 400px;
-		height: 200px;
-}
-	
+@media screen and (max-width: 800px) {
+    .cloud-container {
+    	background-position: center center;
+       
+        height: 200px;
+        padding-left: 50%;
+    }
+   h2 {
+   	font-size: 20px;
+   } 
 }
 
 .cloud-form {
-	text-align: center;
-	font-size: 30px;
-	margin-bottom: 5px;
-	font-family:BIG JOHN;
-	color: #f29947;
-
-	position: absolute;
-	top: 70px;
-	left: 25%;
-	right: 25%;
+    text-align: center;
+    font-size: 30px;
+    margin-bottom: 5px;
+    font-family: BIG JOHN;
+    color: #f29947;
+    position: absolute;
+    top: 70px;
+    left: 25%;
+    right: 25%;
 }
 
 #results {
-	width: 100%;
-	background-image: url("../images/paper.jpg");
-	background-position: center center;
-	background-size: contain;
-	background-repeat: repeat;
-	min-height: 300px;
+    width: 100%;
+    background-image: url("../images/paper.jpg");
+    background-position: center center;
+    background-size: contain;
+    background-repeat: repeat;
+    min-height: 300px;
 }
 
 #addDetails {
-	clear: both;
-	display: inline-block;
-	overflow: hidden;
+    clear: both;
+    display: inline-block;
+    width: 100%;
     white-space: nowrap;
 }
 
 .dblgradbox {
-	margin: auto;
-	padding: 15px;
-	border: 15px solid transparent;
-	border-top: 0px solid transparent;
-	border-image: linear-gradient(to bottom, transparent, #B8B8B8) 3 100%;
-	box-shadow: 0 15px 0 0 #B8B8B8, 0 -5px 0 0 #FFFFFF,  inset 0px 15px 0 0 #B8B8B8;
-	background-image:  linear-gradient(#B8B8B8, transparent), linear-gradient(#B8B8B8, transparent);
-	background-size: 15px 100%;
-	background-position: 0 0, 100% 0;
-	background-repeat: no-repeat;
-	border-radius: 7px;
-	font-family: Didot Regular;
-	font-size: 16px;
-	color: white;
+    margin: auto;
+    padding: 15px;
+    border: 15px solid transparent;
+    border-top: 0px solid transparent;
+    border-image: linear-gradient(to bottom, transparent, #B8B8B8) 3 100%;
+    box-shadow: 0 15px 0 0 #B8B8B8, 0 -5px 0 0 #FFFFFF, inset 0px 15px 0 0 #B8B8B8;
+    background-image: linear-gradient(#B8B8B8, transparent), linear-gradient(#B8B8B8, transparent);
+    background-size: 15px 100%;
+    background-position: 0 0, 100% 0;
+    background-repeat: no-repeat;
+    border-radius: 7px;
+    font-family: Didot Regular;
+    font-size: 10px;
+    color: white;
+    line-height: 150%;
+}
+
+#brewery {
+    padding-top: 2%;
+    border-width: 0 0 5px;
+    border-style: solid;
+    border-image: url(http://www.w3.org/TR/css3-background/border.png) 27;
+    font-size: 25px;
+    text-align: center;
+    padding-bottom: 2%;
+}
+
+#beer,
+#description,
+#details {
+    text-align: center;
+    font-style: italic;
+    font-family: Didot italic;
+    padding-top: 1%;
+}
+
+#beer {
+    font-size: 20px;
+}
+
+#descriptionc,
+#details {
+    font-size: 12px;
+    padding-top: 1%;
+}
+
+#addDetails {
+    font-size: 15px;
+}
+
+#abv {
+    text-align: left
+}
+
+#ibu {
+    padding-left: 30%;
+    text-align: center;
+}
+
+#type {
+    text-align right;
+    padding-left: 15%;
+}
+
+#address2{
+	font-size: 15px;
+	font-family: Didot italic;
+
+}
+
+#address {
+    font-size: 20px;
+    text-align: left;
+    text-decoration: underline;
+}
+
+.lyft {
+    height: 100%;
+    width: 100%;
+}
+
+.uber {
+    background-color: black;
+    height: 100%;
+    width: 100%;
+}
+
+#location {
+	display: inline;
+}
+
+#map {
+
+    float: right;
 }
