@@ -80,6 +80,7 @@ $("#beers").on("click", "#cider", function(){
 
 
 
+
 function onClick(beerType){
     output.beerType = beerType;
 
