@@ -65,16 +65,22 @@ body {
     width: 100%;
     height: 200px;
 }
-
+#cider:hover {
+    background: red;
+    color: white;
+}
 #weird {
     top: 10px;
     width: 100%;
-    height: 200px;
+    height: 185px;
     position: relative;
     padding-left: 10px;
     padding-right: 10px;
 }
-
+#weird:hover {
+    background-color: yellow;
+    color: black;
+}    
 #handle {
     height: 400px;
 }
@@ -93,6 +99,10 @@ body {
     background: linear-gradient(#6b3f18, #2e1906);
     /* Standard syntax (must be last) */
 }
+#dark:hover {
+    background: #331a00;
+    color: white;
+}
 
 #medium {
 	border-radius: 0px;
@@ -109,6 +119,10 @@ body {
     /* Standard syntax (must be last) */
 }
 
+#medium:hover {
+    background: #b35c00;
+    color: white;
+}
 #light {
 	border-radius: 0px 15px 15px 0px;
     height: 400px;
@@ -123,6 +137,12 @@ body {
     background: linear-gradient(#ffbd31, #d5741d);
     /* Standard syntax (must be last) */
 }
+
+ #light:hover {
+     background: yellow;
+     color: white ;
+ }
+
 
 .row.no-gutters {
     margin-right: 0;
@@ -290,4 +310,9 @@ body {
 #map {
 
     float: right;
+}
+
+h6 {
+    font-size: 15px;
+    padding-top: 2%;
 }

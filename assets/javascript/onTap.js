@@ -109,6 +109,8 @@ function onClick(beerType){
 		    	$("#abv").html("abv: " + output.beers[0].abv + "%");
 		    	$("#ibu").empty();
 		    	$("#ibu").html("ibu: " + output.beers[0].style.ibuMax);
+		    	$("#beerType").empty();
+		    	$("#beerType").html("Type: " + output.beers[0].style.category.name);
 		    	$("#details").empty();
 		    	$("#details").html(output.beers[0].description);
 		    	$("#address").empty();
